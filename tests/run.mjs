@@ -7,5 +7,6 @@ import { run } from './harness.mjs';
 await import('./simulation.test.mjs');
 await import('./solver.test.mjs');
 await import('./levels.test.mjs');
+await import('./codec.test.mjs');
 
 await run();
