@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Arrow Escape">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b2352" />
+      <stop offset="1" stop-color="#0d1023" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c5cff" />
+      <stop offset="1" stop-color="#38e8b0" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+  <circle cx="360" cy="360" r="64" fill="none" stroke="#38e8b0" stroke-width="18" />
+  <circle cx="360" cy="360" r="26" fill="#38e8b0" />
+  <g fill="none" stroke="url(#accent)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M136 152 h180" />
+    <path d="M270 104 l58 48 l-58 48" />
+    <path d="M156 152 v150" />
+    <path d="M110 262 l46 52 l46 -52" />
+  </g>
+</svg>

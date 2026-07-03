@@ -1,0 +1,116 @@
+/* screens.css — Layouts specific to individual screens. */
+
+/* Loading / splash */
+.loading {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  background-image: var(--bg-grad);
+  z-index: var(--z-toast);
+  transition: opacity var(--t-slow) var(--ease-out);
+}
+.loading.is-hidden { opacity: 0; pointer-events: none; }
+.loading__inner { text-align: center; }
+.spinner {
+  width: 44px; height: 44px;
+  margin: var(--sp-4) auto 0;
+  border: 3px solid var(--surface-2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+/* Menu extras */
+.menu-screen .brand__logo { animation: float-bob 6s var(--ease-in-out) infinite; }
+.menu-progress {
+  margin-top: var(--sp-5);
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+/* Prose (help / credits) */
+.prose { max-width: 640px; width: 100%; }
+.prose h2 { font-size: var(--fs-lg); margin: var(--sp-5) 0 var(--sp-2); }
+.prose p, .prose li { color: var(--text-dim); margin-bottom: var(--sp-2); }
+.prose ul { padding-left: var(--sp-5); }
+.legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--sp-3); }
+.legend__item { display: flex; align-items: center; gap: var(--sp-3); }
+.legend__key {
+  width: 40px; height: 40px; flex: none;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  display: grid; place-items: center;
+  font-weight: var(--fw-bold);
+}
+
+/* Complete screen */
+.complete__stars { display: flex; justify-content: center; gap: var(--sp-2); margin: var(--sp-4) 0; }
+.complete__stars .star {
+  font-size: 3rem;
+  color: var(--border-strong);
+  transform: scale(0.6);
+  opacity: 0;
+}
+.complete__stars .star.on { color: var(--star); animation: pop-in var(--t-slow) var(--ease-spring) forwards; }
+.complete__stars .star.on:nth-child(2) { animation-delay: 0.12s; }
+.complete__stars .star.on:nth-child(3) { animation-delay: 0.24s; }
+.result-line { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.result-line:last-child { border: none; }
+
+/* Editor */
+.editor { display: flex; flex-direction: column; height: 100%; }
+.editor__body { flex: 1; min-height: 0; display: flex; }
+.editor__board { flex: 1; min-height: 0; position: relative; }
+.editor__palette {
+  width: 220px;
+  border-left: 1px solid var(--border);
+  background: var(--panel);
+  padding: var(--sp-3);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+.palette-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.palette-item {
+  aspect-ratio: 1;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+}
+.palette-item.is-on { border-color: var(--primary); background: var(--surface); box-shadow: 0 0 0 2px var(--primary) inset; }
+.palette-item small { font-size: 9px; color: var(--text-mute); }
+.editor__toolbar { display: flex; gap: var(--sp-2); padding: var(--sp-2) var(--sp-4); flex-wrap: wrap; align-items: center; }
+
+@media (max-width: 640px) {
+  .editor__body { flex-direction: column; }
+  .editor__palette { width: 100%; border-left: none; border-top: 1px solid var(--border); max-height: 40%; }
+  .palette-grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* d-pad for touch (optional, shown on coarse pointers) */
+.dpad {
+  position: absolute;
+  right: var(--sp-4);
+  bottom: calc(var(--sp-5) + env(safe-area-inset-bottom, 0px));
+  display: none;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 48px);
+  gap: 4px;
+  z-index: var(--z-hud);
+  opacity: 0.9;
+}
+.dpad button { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); font-size: 1.2rem; }
+.dpad .up { grid-area: 1 / 2; }
+.dpad .left { grid-area: 2 / 1; }
+.dpad .right { grid-area: 2 / 3; }
+.dpad .down { grid-area: 3 / 2; }
+html.show-dpad .dpad { display: grid; }

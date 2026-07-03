@@ -1,0 +1,237 @@
+/* tokens.css — The single source of truth for design tokens.
+ *
+ * UI colors, spacing, radii, elevation, motion, and the game board palette
+ * (--g-*) all live here. The Canvas renderer reads the --g-* values at runtime,
+ * so switching a theme (a data-theme attribute on <html>) retints everything.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.5rem;
+  --fs-3xl: 3.5rem;
+  --fw-normal: 450;
+  --fw-medium: 550;
+  --fw-bold: 700;
+
+  /* Spacing scale (4px base) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 999px;
+
+  /* Elevation */
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --sh-2: 0 6px 18px rgba(0, 0, 0, 0.35);
+  --sh-3: 0 18px 48px rgba(0, 0, 0, 0.5);
+  --glow: 0 0 24px var(--accent-glow);
+
+  /* Motion */
+  --t-fast: 150ms;
+  --t-med: 250ms;
+  --t-slow: 400ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Z layers */
+  --z-board: 1;
+  --z-hud: 10;
+  --z-overlay: 100;
+  --z-toast: 1000;
+
+  /* UI semantic colors — Aurora (default) */
+  --bg: #0d1023;
+  --bg-2: #131734;
+  --bg-grad: radial-gradient(1200px 800px at 50% -10%, #1b2352 0%, #0d1023 60%);
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.07);
+  --panel: #171c3a;
+  --panel-2: #1e2547;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #eaf0ff;
+  --text-dim: #b7c0e6;
+  --text-mute: #7d87b8;
+  --primary: #7c5cff;
+  --primary-2: #9d84ff;
+  --accent: #38e8b0;
+  --accent-2: #56d0ff;
+  --accent-glow: rgba(124, 92, 255, 0.45);
+  --success: #46d69b;
+  --danger: #ff5d73;
+  --warning: #ffb547;
+  --star: #ffcf5c;
+
+  /* Aliases read by the renderer palette */
+  --color-accent: var(--primary);
+  --color-danger: var(--danger);
+  --color-star: var(--star);
+
+  /* Game board palette (--g-*) — Aurora */
+  --g-board-bg: #10152e;
+  --g-panel: #171c3a;
+  --g-grid: rgba(255, 255, 255, 0.05);
+  --g-tile: #222a4e;
+  --g-tile-edge: #313b6e;
+  --g-wall: #0c0f22;
+  --g-wall-edge: #39427a;
+  --g-stop: #f4b740;
+  --g-start: #7bdff2;
+  --g-exit: #38e8b0;
+  --g-exit-glow: rgba(56, 232, 176, 0.55);
+  --g-fake-exit: #6b7299;
+  --g-void: #05060f;
+  --g-arrow: #7aa2ff;
+  --g-mirror: #b39dff;
+  --g-reverse: #ff8fab;
+  --g-rotate: #ffd166;
+  --g-ice: #6fb7d8;
+  --g-conveyor: #8ea0c9;
+  --g-oneway: #88e0a3;
+  --g-player: #ffd36e;
+  --g-player-edge: #b8862f;
+  --g-player-glow: rgba(255, 211, 110, 0.55);
+  --g-gem: #4ade80;
+  --g-key: #ffd166;
+  --g-lock: #c98b5a;
+  --g-portal-a: #b78cff;
+  --g-portal-b: #56d0ff;
+  --g-laser: #ff5d73;
+  --g-switch: #f2a65a;
+  --g-bridge: #8b6f47;
+  --g-mwall: #5a6285;
+  --g-text: #e7ecff;
+  --g-c0: #ff5d73;
+  --g-c1: #4aa3ff;
+  --g-c2: #46d69b;
+  --g-c3: #ffcf5c;
+  --g-c4: #b98cff;
+  --g-c5: #4fe3e3;
+}
+
+/* ------------------------------------------------------------------ Themes */
+
+:root[data-theme="sunset"] {
+  --bg: #1a1020;
+  --bg-grad: radial-gradient(1200px 800px at 50% -10%, #4a1f3a 0%, #1a1020 60%);
+  --panel: #2a1830;
+  --panel-2: #33203c;
+  --primary: #ff7a59;
+  --primary-2: #ffa06b;
+  --accent: #ffca67;
+  --accent-glow: rgba(255, 122, 89, 0.45);
+  --g-board-bg: #241426;
+  --g-tile: #3a2340;
+  --g-tile-edge: #563255;
+  --g-wall: #180d1a;
+  --g-arrow: #ff9e7a;
+  --g-exit: #ffca67;
+  --g-exit-glow: rgba(255, 202, 103, 0.55);
+  --g-player: #ffd9a0;
+  --g-player-glow: rgba(255, 160, 107, 0.5);
+}
+
+:root[data-theme="forest"] {
+  --bg: #0a1710;
+  --bg-grad: radial-gradient(1200px 800px at 50% -10%, #15361f 0%, #0a1710 60%);
+  --panel: #12241a;
+  --panel-2: #183021;
+  --primary: #4fbf7a;
+  --primary-2: #77d99a;
+  --accent: #b7e36a;
+  --accent-glow: rgba(79, 191, 122, 0.4);
+  --g-board-bg: #0f2015;
+  --g-tile: #1c3626;
+  --g-tile-edge: #2c4d38;
+  --g-arrow: #8fd9a3;
+  --g-exit: #b7e36a;
+  --g-exit-glow: rgba(183, 227, 106, 0.5);
+  --g-player: #e8e08a;
+}
+
+:root[data-theme="neon"] {
+  --bg: #06060f;
+  --bg-grad: radial-gradient(1200px 800px at 50% -10%, #16103a 0%, #06060f 65%);
+  --panel: #0f0f22;
+  --panel-2: #16162e;
+  --primary: #ff2fb9;
+  --primary-2: #ff6ad0;
+  --accent: #21f0ff;
+  --accent-glow: rgba(255, 47, 185, 0.5);
+  --g-board-bg: #0a0a18;
+  --g-tile: #141430;
+  --g-tile-edge: #2a2a5e;
+  --g-arrow: #57c7ff;
+  --g-exit: #21f0ff;
+  --g-exit-glow: rgba(33, 240, 255, 0.6);
+  --g-player: #fffb5c;
+  --g-player-glow: rgba(255, 47, 185, 0.55);
+}
+
+:root[data-theme="mono"] {
+  color-scheme: light;
+  --bg: #eef1f6;
+  --bg-grad: radial-gradient(1200px 800px at 50% -10%, #ffffff 0%, #e6e9f0 70%);
+  --panel: #ffffff;
+  --panel-2: #f3f5fa;
+  --border: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.24);
+  --text: #14182b;
+  --text-dim: #40485f;
+  --text-mute: #6b7288;
+  --surface: rgba(0, 0, 0, 0.04);
+  --surface-2: rgba(0, 0, 0, 0.07);
+  --primary: #3b4bdb;
+  --primary-2: #5866e6;
+  --accent: #0aa06e;
+  --accent-glow: rgba(59, 75, 219, 0.3);
+  --star: #d99a00;
+  --g-board-bg: #dfe3ec;
+  --g-panel: #ffffff;
+  --g-grid: rgba(0, 0, 0, 0.06);
+  --g-tile: #ffffff;
+  --g-tile-edge: #c7cee0;
+  --g-wall: #2b3350;
+  --g-wall-edge: #454f74;
+  --g-void: #1a2036;
+  --g-arrow: #3b4bdb;
+  --g-mirror: #7a3bdb;
+  --g-exit: #0aa06e;
+  --g-exit-glow: rgba(10, 160, 110, 0.4);
+  --g-player: #e6a100;
+  --g-player-edge: #a37200;
+  --g-player-glow: rgba(230, 161, 0, 0.4);
+  --g-text: #14182b;
+}
+
+/* Colorblind-friendly board palette (applies on top of any theme) */
+:root[data-colorblind="deuter"] {
+  --g-c0: #d81b60;
+  --g-c1: #1e88e5;
+  --g-c2: #ffc107;
+  --g-c3: #ff8f00;
+  --g-c4: #8e24aa;
+  --g-c5: #00acc1;
+  --g-arrow: #1e88e5;
+  --g-exit: #ffc107;
+}

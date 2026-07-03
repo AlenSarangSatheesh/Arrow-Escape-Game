@@ -77,18 +77,22 @@ export class Renderer {
     this.particles.clear();
     this._move = null;
     this.resize();
+    this.draw();
   }
 
   setState(state) {
     this.state = state;
+    this.draw(); // repaint immediately so the board is correct even if rAF is throttled
   }
 
   setHint(dir) {
     this.hintDir = dir;
+    this.draw();
   }
 
   clearHint() {
     this.hintDir = null;
+    this.draw();
   }
 
   /* -------------------------------------------------------------- lifecycle */
@@ -99,6 +103,7 @@ export class Renderer {
     this.refreshPalette();
     window.addEventListener('resize', this._onResize);
     this.resize();
+    this.draw(); // immediate first paint, independent of the rAF loop
     this._lastTs = 0;
     this._raf = requestAnimationFrame((ts) => this._loop(ts));
   }
@@ -120,6 +125,9 @@ export class Renderer {
     this.cssW = cssW;
     this.cssH = cssH;
     if (this.level) this.camera.fit(cssW, cssH, this.level.width, this.level.height);
+    // Setting canvas.width above clears the bitmap; repaint so the board does not
+    // blank out on resize (important when the rAF loop is throttled).
+    this.draw();
   }
 
   _loop(ts) {

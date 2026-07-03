@@ -16,13 +16,14 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor / OS
+# Editor / OS / tooling
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+.claude/
 *.swp
 *~
 

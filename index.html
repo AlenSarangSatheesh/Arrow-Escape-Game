@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en" data-theme="aurora">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#0d1023" />
+    <meta name="description" content="Arrow Escape — a polished slide-and-redirect grid puzzle. Obey every arrow and reach the exit." />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Arrow Escape</title>
+
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/icons/icon.svg" />
+
+    <link rel="stylesheet" href="./styles/tokens.css" />
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/components.css" />
+    <link rel="stylesheet" href="./styles/screens.css" />
+    <link rel="stylesheet" href="./styles/animations.css" />
+  </head>
+  <body>
+    <div id="loading" class="loading" aria-hidden="true">
+      <div class="loading__inner">
+        <div class="brand__logo">Arrow Escape</div>
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <main id="app"></main>
+
+    <noscript>
+      <p style="padding: 2rem; text-align: center">
+        Arrow Escape needs JavaScript to run. Please enable it in your browser.
+      </p>
+    </noscript>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

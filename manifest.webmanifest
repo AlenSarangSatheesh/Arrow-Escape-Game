@@ -1,0 +1,20 @@
+{
+  "name": "Arrow Escape",
+  "short_name": "Arrow Escape",
+  "description": "A polished slide-and-redirect grid puzzle. Obey every arrow and reach the exit.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d1023",
+  "theme_color": "#0d1023",
+  "categories": ["games", "puzzle"],
+  "icons": [
+    {
+      "src": "./assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
