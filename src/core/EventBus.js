@@ -80,6 +80,7 @@ export const Events = Object.freeze({
   MOVE_APPLIED: 'move:applied', // { from, to, path, outcome, state }
   MOVE_ILLEGAL: 'move:illegal', // { dir, reason }
   MOVE_UNDONE: 'move:undone',
+  STATUS: 'session:status', // { moves, par, optimal, timeMs, ... } — HUD updates
   // Pickups / state
   GEM_COLLECTED: 'gem:collected',
   KEY_COLLECTED: 'key:collected',
