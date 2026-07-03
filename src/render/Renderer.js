@@ -140,6 +140,12 @@ export class Renderer {
     this.particles.update(dt);
     this.draw();
 
+    // With reduced motion there is nothing to animate at rest, so pause the loop
+    // to save battery; any state change repaints on demand via draw().
+    if (this.reducedMotion && !this._move && this.particles.activeCount === 0) {
+      this._raf = 0;
+      return;
+    }
     this._raf = requestAnimationFrame((t) => this._loop(t));
   }
 
@@ -227,6 +233,7 @@ export class Renderer {
   }
 
   _spawnOutcome(path, outcome) {
+    if (this.reducedMotion) return; // no particle bursts in reduced-motion mode
     if (!path || !path.length) return;
     const last = path[path.length - 1];
     const c = this.camera.cellCenter(last.x, last.y);

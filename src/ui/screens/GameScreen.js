@@ -209,6 +209,13 @@ export function gameScreen(app, params = {}) {
         bus.on(Events.LEVEL_WON, onWin),
         bus.on(Events.LEVEL_FAILED, onFail),
         bus.on(Events.MOVE_APPLIED, () => { if (coach) coach.style.display = 'none'; }),
+        // React to live setting changes (theme, reduced motion) mid-session.
+        // Deferred so the document theme attribute is applied first.
+        bus.on(Events.SETTINGS_CHANGED, () => setTimeout(() => {
+          renderer.setReducedMotion(settings.reducedMotionActive());
+          renderer.refreshPalette();
+          renderer.draw();
+        }, 0)),
       ];
       controller.load(level);
       renderer.resize();

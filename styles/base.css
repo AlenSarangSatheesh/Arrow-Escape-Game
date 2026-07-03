@@ -137,3 +137,20 @@ a:hover { text-decoration: underline; }
 .center { text-align: center; }
 .muted { color: var(--text-mute); }
 .dim { color: var(--text-dim); }
+
+/* High-contrast mode: strengthen borders and focus rings for both dark and
+   light (mono) themes. */
+html.high-contrast:not([data-theme="mono"]) {
+  --border: rgba(255, 255, 255, 0.38);
+  --border-strong: rgba(255, 255, 255, 0.62);
+  --text-mute: #c3cbec;
+  --g-grid: rgba(255, 255, 255, 0.2);
+}
+html.high-contrast[data-theme="mono"] {
+  --border: rgba(0, 0, 0, 0.42);
+  --border-strong: rgba(0, 0, 0, 0.7);
+  --text-mute: #333a52;
+  --g-grid: rgba(0, 0, 0, 0.18);
+}
+html.high-contrast .btn { border-width: 2px; }
+html.high-contrast :focus-visible { outline-width: 4px; outline-offset: 2px; }

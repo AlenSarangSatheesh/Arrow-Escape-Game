@@ -38,6 +38,10 @@ export class ScreenManager {
     void instance.el.offsetWidth;
     instance.el.classList.add('is-active');
     instance.onEnter?.();
+    // Move focus to the top of the new screen for keyboard and screen-reader
+    // users, without highlighting an arbitrary control.
+    instance.el.setAttribute('tabindex', '-1');
+    instance.el.focus?.({ preventScroll: true });
 
     if (previous && !replace) previous.el.classList.remove('is-active');
     if (previous && !replace) previous.onExit?.();
