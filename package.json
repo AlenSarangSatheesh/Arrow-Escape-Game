@@ -1,0 +1,40 @@
+{
+  "name": "arrow-escape",
+  "version": "0.1.0",
+  "description": "A polished slide-and-redirect grid puzzle game for the browser. Route yourself to the exit by obeying every arrow.",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "author": "Alen Sarang Satheesh and the Arrow Escape contributors",
+  "homepage": "https://github.com/AlenSarangSatheesh/Arrow-Escape-Game#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlenSarangSatheesh/Arrow-Escape-Game.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlenSarangSatheesh/Arrow-Escape-Game/issues"
+  },
+  "keywords": [
+    "game",
+    "puzzle",
+    "browser-game",
+    "html5",
+    "canvas",
+    "javascript",
+    "vanilla-js",
+    "pwa",
+    "no-framework",
+    "maze"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "dev": "node scripts/serve.mjs",
+    "test": "node tests/run.mjs",
+    "check": "node scripts/check-syntax.mjs"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
