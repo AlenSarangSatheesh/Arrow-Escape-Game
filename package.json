@@ -33,7 +33,8 @@
     "start": "node scripts/serve.mjs",
     "dev": "node scripts/serve.mjs",
     "test": "node tests/run.mjs",
-    "check": "node scripts/check-syntax.mjs"
+    "check": "node scripts/check-syntax.mjs",
+    "levels": "node scripts/validate-levels.mjs"
   },
   "dependencies": {},
   "devDependencies": {}
