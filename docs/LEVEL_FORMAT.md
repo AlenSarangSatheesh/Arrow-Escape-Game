@@ -177,7 +177,7 @@ export const TileType = Object.freeze({
   FAKE_EXIT:    7,  // decoy exit; behaves like WALL but reads as an exit
   VOID:         8,  // hole/open cell; token falls → soft-fail
   ONEWAY:       9,  // one-way gate: passable only along param direction
-  ICE:         10,  // like floor, but token cannot voluntarily stop on it
+  ICE:         10,  // frictionless: skids the token past the next redirect tile
   CONVEYOR:    11,  // after a rest lands here, nudge one tile in param dir
   ROTATOR:     12,  // rotating arrow: redirects to param dir, then rotates +1 CW on exit
   CHARGE:      13,  // numbered arrow: acts as floor until hit `n` times, then redirects
@@ -185,6 +185,12 @@ export const TileType = Object.freeze({
   FUSE:        15   // must be reached within K moves of activation, else seals (→ WALL)
 });
 ```
+
+> **Authoritative source.** The canonical tile ids and the exact tile/entity
+> split are defined in [`src/core/Constants.js`](../src/core/Constants.js) (for
+> example, terrain such as color gates and locks are tiles, while portals, keys,
+> switches, lasers, and moving walls are *entities*). This document is a
+> conceptual reference; when the two differ, the code wins.
 
 ### Per-tile parameters & behavior
 
@@ -203,7 +209,7 @@ The `param` column describes the payload packed alongside the tile (see §5 for 
 | `FAKE_EXIT` | 7     | —                                            | yes*   | Looks like an exit; behaves as `WALL` (rejects the token).                    |
 | `VOID`      | 8     | —                                            | fail   | Token falls → soft-fail (auto-undo prompt) unless a flying mechanic applies.  |
 | `ONEWAY`    | 9     | `dir` (permitted travel direction)           | cond.  | Enterable only when moving along `dir`; otherwise behaves as `WALL`.          |
-| `ICE`       | 10    | —                                            | no     | Like `FLOOR`; the token may not voluntarily stop on an ice run.               |
+| `ICE`       | 10    | —                                            | no     | Frictionless floor; the token skids straight past the next redirect tile.     |
 | `CONVEYOR`  | 11    | `dir` (nudge direction)                      | yes    | Halts, then on the following resolution nudges one tile toward `dir`.         |
 | `ROTATOR`   | 12    | `dir` (current facing)                       | no     | Redirect to `dir`; on the token leaving, `dir → rotateCW(dir)`.               |
 | `CHARGE`    | 13    | `dir` (4b) + `n` remaining hits (4b)         | no     | Acts as `FLOOR` while `n>0`, decrementing `n` per hit; at `n==0` redirects.   |

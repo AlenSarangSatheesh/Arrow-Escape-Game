@@ -75,7 +75,7 @@ At each tile the token enters, resolution proceeds by tile type:
 | **EXIT (real)** | Level complete. |
 | **PORTAL(a)** | Teleport to paired **PORTAL(b)**, keep direction, continue. |
 | **CONVEYOR(dir)** | While the token *rests* on it after stopping, it is **nudged** one tile in `dir` (creates additional motion). |
-| **ICE** | Behaves like floor but the token **cannot voluntarily stop** on it. |
+| **ICE** | Frictionless floor: it **skids the token straight past the very next redirect tile** (an arrow immediately after ice is ignored). |
 
 ### 4.4 Determinism and the safety valve
 
@@ -239,7 +239,7 @@ The complete mechanic set, ordered by teaching sequence. Each is introduced **on
 | 15 | **Moving wall** | Expert | Shifts position on a step cycle: its phase is a function of the **move count** (`phase = f(moveCount)`). | The board breathes; you time launches to gaps. | Introduce a slow, clearly-telegraphed shuttle. | Deterministic on move count (P1); combines with timed doors (16) for choreography. |
 | 16 | **Timed door** | Expert | Opens/closes based on move-count **parity or period**. | Rhythm inside a logic puzzle; plan around the beat. | Door open on even moves, closed on odd — shown with a counter. | Sibling to moving walls (15); both are pure functions of move count, keeping the level solvable. |
 | 17 | **Laser + emitter / mirror routing** | Expert | A beam blocks or kills the token unless rerouted (via mirrors) or disabled (via switch). | Reroute-the-beam spatial logic; a hazard you *reshape*. | Start with a beam you simply avoid, then one you must reroute with a mirror (4). | Heavy synergy with mirrors (4), switches (13), and crossovers (14); a hazard for soft-fail (§7). |
-| 18 | **Ice lake** | Expert | Across ice, the token **cannot stop mid-lake** — it must slide until it leaves the ice or hits a stop. | Commitment: you cannot pause on the ice. | Small lake with an obvious far-side wall to stop against. | Needs walls/stop pads (2) as landing edges; arrows (1) on ice still redirect. |
+| 18 | **Ice** | Expert | Frictionless: crossing ice makes the token **skid straight past the very next redirect tile** (the immediately-following arrow or mirror is ignored). | Subverts expectation — the arrow you were counting on is skipped. | Place an arrow right after an ice tile and show it being ignored. | Combines with arrows/mirrors (1, 4) to build "obvious but wrong" routes. |
 | 19 | **Multiple real exits + fake exits** | Expert | More than one real exit may exist alongside fakes; reaching **any real** exit wins. | Choice and mis-direction; the "which one?" tension. | Late-Expert: two reals, one fake, distinct routes. | Culmination of exit reading (3); central to bosses (23). |
 | 20 | **Numbered / charge arrow** *(invented)* | Master | Acts as **floor** until it has been hit **N times**; only then does it redirect like an arrow. | A counter you must "charge" — routing to build up hits. | Introduce a 2-charge arrow with a loop that feeds it twice. | Interacts with rotating arrow (11) and reverse (5) to accumulate hits; pure function of hit count (P1). |
 | 21 | **Magnet tile** *(invented)* | Master | When the token comes adjacent to a magnet, it is **pulled one extra tile toward** the magnet. | An attractive force bending your clean lines. | Show a magnet that helpfully pulls the token onto a target. | Combines with conveyors (12) for compound extra-motion; positioning against walls (2) matters. |
@@ -482,7 +482,7 @@ All generated content (Daily, Endless, and generator-assisted Editor validation)
 | **Void** | An open edge or hole; entering it is a soft fail (falling). |
 | **Portal** | Paired teleporter; entering one exits the other with direction preserved. |
 | **Conveyor** | A tile that nudges the resting token one extra tile in its direction. |
-| **Ice** | A tile the token cannot voluntarily stop on. |
+| **Ice** | A frictionless tile that makes the token skid past the next redirect tile. |
 | **Collectible / Gem** | Optional pickup; all gems are required for 3 stars. |
 | **Par** | Solver-optimal move count plus a small slack; the 2-star threshold. |
 | **Optimal** | The solver's minimum move count; the 3-star move requirement. |
