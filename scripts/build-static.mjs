@@ -1,7 +1,11 @@
-// Turns the Vite build (dist/dev.html + dist/assets/*) into a single self-contained index.html at
-// the repo root. GitHub Pages serves that root file directly in "deploy from a branch" mode, so no
-// server-side build or separate asset files are needed.
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs'
+// Turns the Vite build (dist/dev.html + dist/assets/*) into a single self-contained index.html.
+// It writes that file to two places:
+//   - the repo root, so GitHub Pages "deploy from a branch" serves it directly, and so the file
+//     can be opened straight from disk;
+//   - dist/index.html (replacing dev.html + assets/), so the GitHub Actions workflow can upload
+//     dist/ as the Pages artifact.
+// This makes deployment work whichever Pages "source" mode the repo happens to be in.
+import { readFileSync, writeFileSync, readdirSync, rmSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -25,5 +29,12 @@ html = html.replace(
   (_m, src) => `<script type="module">${readFileSync(resolve(dist, src), 'utf8')}</script>`,
 )
 
+// Root copy (branch-mode / open-from-disk).
 writeFileSync(resolve(root, 'index.html'), html)
-console.log(`build-static: wrote self-contained index.html (${(html.length / 1024).toFixed(1)} kB)`)
+
+// Clean dist down to a single self-contained index.html (the Actions artifact).
+rmSync(resolve(dist, 'assets'), { recursive: true, force: true })
+rmSync(resolve(dist, htmlName), { force: true })
+writeFileSync(resolve(dist, 'index.html'), html)
+
+console.log(`build-static: wrote self-contained index.html (${(html.length / 1024).toFixed(1)} kB) to root and dist/`)
