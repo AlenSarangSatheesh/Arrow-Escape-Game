@@ -1,0 +1,297 @@
+/* Design tokens recovered from the reference recording.
+   The capture had a ~0.729 multiplicative brightness gain; these are the corrected values. */
+:root {
+  --bg: #f4f4f4;
+  --ink: #14142e;
+  --navy: #2c336e;
+  --indigo: #5865f2;
+  --red: #f3455b;
+  --lavender: #c6cbed;
+  --surface-2: #e0e1eb;
+  --dot: #cfcde8;
+  --green: #12cc6a;
+
+  --hud-h: 72px;
+  --escape-ms: 420ms;
+
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #app {
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--navy);
+  font-family: Nunito, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 800;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+}
+
+#app {
+  position: relative;
+  max-width: 520px;
+  margin-inline: auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.screen[hidden] { display: none; }
+
+/* ---------- intro ---------- */
+
+.screen--intro {
+  align-items: center;
+  justify-content: center;
+  gap: 12vh;
+  animation: fade-in 320ms ease-out;
+}
+
+.intro__brand { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  font-size: clamp(34px, 11vw, 52px);
+  letter-spacing: -0.02em;
+  color: var(--navy);
+}
+.wordmark__a {
+  width: 0.72em;
+  height: 0.72em;
+  fill: var(--navy);
+  transform: translateY(0.03em);
+}
+.wordmark span { margin-left: -0.04em; }
+
+.intro__level { display: flex; align-items: center; gap: 6px; }
+
+.chev {
+  border: 0;
+  background: transparent;
+  color: var(--lavender);
+  font-size: 15px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: color 140ms;
+}
+.chev:enabled:hover { color: var(--indigo); }
+.chev:disabled { opacity: 0.3; cursor: default; }
+
+.level-counter {
+  display: flex;
+  gap: 0.34em;
+  align-items: baseline;
+  font-size: clamp(17px, 5vw, 21px);
+  color: var(--indigo);
+  min-width: 5.6em;
+  justify-content: center;
+}
+.level-counter__digits {
+  position: relative;
+  display: inline-block;
+  min-width: 1.2em;
+  height: 1.3em;
+  overflow: hidden;
+  text-align: left;
+}
+.level-counter__digits > span {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+}
+.level-counter__digits > span.enter { animation: digit-enter 400ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.level-counter__digits > span.leave { animation: digit-leave 400ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes digit-enter { from { transform: translateY(-0.85em); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes digit-leave { from { transform: none; opacity: 1 } to { transform: translateY(0.85em); opacity: 0 } }
+
+.btn {
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;
+}
+.btn--primary {
+  background: var(--indigo);
+  color: #fff;
+  font-size: 18px;
+  padding: 17px 0;
+  width: min(66vw, 280px);
+  box-shadow: 0 6px 18px rgb(88 101 242 / 28%);
+  transition: transform 120ms ease-out, box-shadow 120ms;
+  animation: pop-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.btn--primary:active { transform: scale(0.97); box-shadow: 0 3px 10px rgb(88 101 242 / 24%); }
+
+@keyframes pop-in { from { transform: scale(0.86); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+
+/* ---------- hud ---------- */
+
+.hud {
+  height: var(--hud-h);
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  position: relative;
+  z-index: 2;
+}
+.hud__left { display: flex; gap: 10px; }
+.hud--tutorial .hud__left { visibility: hidden; }
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--lavender);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 120ms;
+}
+.icon-btn:active { transform: scale(0.92); }
+.icon-btn svg { width: 17px; height: 17px; fill: var(--navy); }
+
+.hearts {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+.heart {
+  width: 22px;
+  height: 22px;
+  color: var(--red);
+  animation: heart-in 300ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.heart svg { width: 100%; height: 100%; fill: currentColor; transition: fill 130ms ease-out; }
+.heart--empty { color: var(--lavender); }
+.hearts--pulse { animation: hearts-pulse 320ms ease-out; }
+
+@keyframes heart-in { from { transform: scale(0.2); opacity: 0 } to { transform: none; opacity: 1 } }
+@keyframes hearts-pulse { 40% { transform: translateX(-50%) scale(1.16) } }
+
+/* ---------- board ---------- */
+
+.stage { position: relative; flex: 1; min-height: 0; }
+.board, .confetti { position: absolute; inset: 0; width: 100%; height: 100%; }
+.confetti { pointer-events: none; }
+
+.dot { fill: var(--dot); animation: fade-in 260ms ease-out both; }
+
+.arrow__shaft,
+.arrow__head { transition: fill 140ms ease-out, stroke 140ms ease-out; }
+.arrow__shaft {
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+.arrow__head { fill: var(--ink); pointer-events: none; }
+.arrow__hit { fill: none; stroke: transparent; pointer-events: stroke; cursor: pointer; }
+
+.arrow--red .arrow__shaft { stroke: var(--red); }
+.arrow--red .arrow__head { fill: var(--red); }
+
+.arrow--escaping .arrow__shaft { stroke: var(--indigo); transition: none; }
+.arrow--escaping .arrow__head { fill: var(--indigo); transition: none; }
+
+/* every arrow tints toward red during the failure flash */
+.board--flash .arrow__shaft { stroke: #8f2d3d; }
+.board--flash .arrow__head { fill: #8f2d3d; }
+.board--flash .arrow--red .arrow__shaft { stroke: var(--red); }
+.board--flash .arrow--red .arrow__head { fill: var(--red); }
+
+/* ---------- overlays ---------- */
+
+.wash {
+  position: absolute;
+  inset: 0;
+  background: var(--red);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.wash--on { animation: wash 300ms ease-out; }
+@keyframes wash { 0% { opacity: 0 } 35% { opacity: 0.1 } 100% { opacity: 0 } }
+
+.praise {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 42%;
+  text-align: center;
+  font-size: clamp(26px, 8vw, 38px);
+  color: var(--navy);
+  opacity: 0;
+  pointer-events: none;
+}
+.praise--on { animation: praise 1700ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes praise {
+  0% { opacity: 0; transform: scale(0.7) }
+  14% { opacity: 1; transform: scale(1) }
+  82% { opacity: 1; transform: scale(1) }
+  100% { opacity: 0; transform: scale(1.04) }
+}
+
+.hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  color: var(--indigo);
+  font-size: 15px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  white-space: nowrap;
+  animation: fade-in 400ms ease-out both;
+}
+.hint[hidden] { display: none; }
+
+.toast {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--navy);
+  color: #fff;
+  font-size: 16px;
+  padding: 14px 24px;
+  border-radius: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+.toast--on { animation: toast 1100ms ease-out both; }
+@keyframes toast {
+  0% { opacity: 0; transform: translate(-50%, -42%) scale(0.9) }
+  15%, 75% { opacity: 1; transform: translate(-50%, -50%) scale(1) }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1) }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --escape-ms: 1ms; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
