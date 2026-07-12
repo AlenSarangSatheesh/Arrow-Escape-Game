@@ -9,14 +9,15 @@ export interface ArrowView {
   group: SVGGElement
   shaft: SVGPathElement
   headEl: SVGPolygonElement
-  hit: SVGPathElement
 }
 
 export function strokeWidth(L: Layout): number {
   return Math.max(3, L.cell * 0.2)
 }
 
-export function makeArrowView(arrow: Arrow, L: Layout, onTap: (id: number) => void): ArrowView {
+// Taps are hit-tested at the board level (nearest occupied cell), so arrows need no per-shape hit
+// target — the whole cell an arrow covers, plus a margin, is tappable. See BoardView.
+export function makeArrowView(arrow: Arrow, L: Layout): ArrowView {
   const group = document.createElementNS(SVG, 'g')
   group.classList.add('arrow')
   group.dataset.id = String(arrow.id)
@@ -29,23 +30,13 @@ export function makeArrowView(arrow: Arrow, L: Layout, onTap: (id: number) => vo
   const headEl = document.createElementNS(SVG, 'polygon')
   headEl.classList.add('arrow__head')
 
-  const hit = document.createElementNS(SVG, 'path')
-  hit.classList.add('arrow__hit')
-  hit.setAttribute('stroke-width', String(L.cell * 0.85))
-
-  group.append(shaft, headEl, hit)
-  layoutArrowView({ arrow, group, shaft, headEl, hit }, L)
-
-  const fire = (e: Event) => {
-    e.preventDefault()
-    onTap(arrow.id)
-  }
-  hit.addEventListener('pointerdown', fire)
-
-  return { arrow, group, shaft, headEl, hit }
+  group.append(shaft, headEl)
+  const v = { arrow, group, shaft, headEl }
+  layoutArrowView(v, L)
+  return v
 }
 
-/** Draws the arrow at rest: shaft = body polyline, arrowhead at the head cell, hit path = shaft. */
+/** Draws the arrow at rest: shaft = body polyline, arrowhead at the head cell. */
 export function layoutArrowView(v: ArrowView, L: Layout): void {
   const pts = points(v.arrow.cells, L)
   // Stop the shaft a touch short of the head centre so the arrowhead isn't drawn over the stroke.
@@ -58,9 +49,7 @@ export function layoutArrowView(v: ArrowView, L: Layout): void {
   const back = Math.min(seg * 0.5, L.cell * 0.18)
   shaftPts[shaftPts.length - 1] = { x: last.x - (dx / seg) * back, y: last.y - (dy / seg) * back }
 
-  const d = pathD(shaftPts)
-  v.shaft.setAttribute('d', d)
-  v.hit.setAttribute('d', pathD(pts))
+  v.shaft.setAttribute('d', pathD(shaftPts))
   v.headEl.setAttribute('points', arrowheadPoints(centerOfHead(v, L), v.arrow.dir, L.cell))
 }
 

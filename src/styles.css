@@ -191,6 +191,8 @@ body {
 
 .stage { position: relative; flex: 1; min-height: 0; }
 .board, .confetti { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The whole board captures taps; hit-testing to the nearest arrow happens in JS. */
+.board { touch-action: none; cursor: pointer; }
 .confetti { pointer-events: none; }
 
 .dot { fill: var(--dot); animation: fade-in 260ms ease-out both; }
@@ -205,7 +207,6 @@ body {
   pointer-events: none;
 }
 .arrow__head { fill: var(--ink); pointer-events: none; }
-.arrow__hit { fill: none; stroke: transparent; pointer-events: stroke; cursor: pointer; }
 
 .arrow--red .arrow__shaft { stroke: var(--red); }
 .arrow--red .arrow__head { fill: var(--red); }
@@ -262,6 +263,7 @@ body {
   padding: 14px 26px;
   border-radius: 999px;
   white-space: nowrap;
+  pointer-events: none;
   animation: fade-in 400ms ease-out both;
 }
 .hint[hidden] { display: none; }

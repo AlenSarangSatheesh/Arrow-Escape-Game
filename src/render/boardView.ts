@@ -26,6 +26,7 @@ export class BoardView {
     this.L = this.computeLayout()
     this.render()
     window.addEventListener('resize', this.onResize)
+    this.svg.addEventListener('pointerdown', this.onPointerDown)
   }
 
   get layout(): Layout {
@@ -64,9 +65,40 @@ export class BoardView {
   }
 
   private addArrowView(arrow: Arrow): void {
-    const v = makeArrowView(arrow, this.L, this.onArrowTap)
+    const v = makeArrowView(arrow, this.L)
     this.arrowLayer.append(v.group)
     this.views.set(arrow.id, v)
+  }
+
+  /**
+   * Forgiving hit-testing: a tap anywhere within (or up to ~0.9 cell from) a cell an arrow occupies
+   * selects that arrow, ties broken by nearest cell centre. Far more tolerant than requiring a hit
+   * on the thin shaft, and unambiguous because each cell belongs to at most one arrow. Escaping
+   * arrows are already gone from the model, so their old cells fall through to the next-nearest.
+   */
+  private onPointerDown = (e: PointerEvent): void => {
+    const ctm = this.svg.getScreenCTM()
+    if (!ctm) return
+    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(ctm.inverse())
+
+    const maxDist = this.L.cell * 0.9
+    let bestId: number | null = null
+    let bestDist = maxDist
+    for (const arrow of this.board.arrows) {
+      for (const cell of arrow.cells) {
+        const c = center(cell, this.L)
+        const d = Math.hypot(p.x - c.x, p.y - c.y)
+        if (d < bestDist) {
+          bestDist = d
+          bestId = arrow.id
+        }
+      }
+    }
+
+    if (bestId !== null) {
+      e.preventDefault()
+      this.onArrowTap(bestId)
+    }
   }
 
   /** Animate a legal escape. The model must already reflect the removal before dots refresh. */
@@ -114,5 +146,6 @@ export class BoardView {
 
   destroy(): void {
     window.removeEventListener('resize', this.onResize)
+    this.svg.removeEventListener('pointerdown', this.onPointerDown)
   }
 }

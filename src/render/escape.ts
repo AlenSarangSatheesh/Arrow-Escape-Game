@@ -47,7 +47,6 @@ export function animateEscape(v: ArrowView, L: Layout, onDone: () => void): void
   const v2 = DIR_VEC[v.arrow.dir]
 
   v.group.classList.add('arrow--escaping')
-  v.hit.style.pointerEvents = 'none'
 
   v.shaft.setAttribute('d', pathD(geo.extended))
   v.shaft.style.strokeDasharray = `${geo.bodyLen} ${geo.totalLen}`
