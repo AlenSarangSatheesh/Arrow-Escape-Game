@@ -1,5 +1,5 @@
 import { center, type Layout, layoutFor } from '../core/geometry'
-import type { Arrow, Board } from '../core/types'
+import { type Arrow, type Board, key } from '../core/types'
 import { type ArrowView, layoutArrowView, makeArrowView } from './arrowView'
 import { animateEscape } from './escape'
 import { animateLunge } from './lunge'
@@ -17,6 +17,8 @@ export class BoardView {
   private board: Board
   private L: Layout
   private views = new Map<number, ArrowView>()
+  /** Cells that currently show a dot, so reveals only add newly-emptied cells (no re-fade flicker). */
+  private dotted = new Set<string>()
 
   constructor(svg: SVGSVGElement, board: Board, private onArrowTap: (id: number) => void) {
     this.svg = svg
@@ -49,18 +51,34 @@ export class BoardView {
     for (const arrow of this.board.arrows) this.addArrowView(arrow)
   }
 
+  private occupiedCells(): Set<string> {
+    const occ = new Set<string>()
+    for (const a of this.board.arrows) for (const c of a.cells) occ.add(key(c.c, c.r))
+    return occ
+  }
+
+  private drawDot(c: number, r: number): void {
+    const p = center({ c, r }, this.L)
+    const dot = document.createElementNS(SVG, 'circle')
+    dot.classList.add('dot')
+    dot.setAttribute('cx', p.x.toFixed(2))
+    dot.setAttribute('cy', p.y.toFixed(2))
+    dot.setAttribute('r', Math.max(1.5, this.L.cell * 0.07).toFixed(2))
+    this.dotLayer.append(dot)
+  }
+
+  /** Full redraw of the dot grid: a dot on every empty (unoccupied) cell. Used on layout changes. */
   private renderDots(): void {
     this.dotLayer.replaceChildren()
-    const r = Math.max(1.5, this.L.cell * 0.07)
-    for (const k of this.board.vacated) {
-      const [c, rr] = k.split(',').map(Number)
-      const p = center({ c, r: rr }, this.L)
-      const dot = document.createElementNS(SVG, 'circle')
-      dot.classList.add('dot')
-      dot.setAttribute('cx', p.x.toFixed(2))
-      dot.setAttribute('cy', p.y.toFixed(2))
-      dot.setAttribute('r', r.toFixed(2))
-      this.dotLayer.append(dot)
+    this.dotted.clear()
+    const occ = this.occupiedCells()
+    for (let r = 0; r < this.board.rows; r++) {
+      for (let c = 0; c < this.board.cols; c++) {
+        const k = key(c, r)
+        if (occ.has(k)) continue
+        this.drawDot(c, r)
+        this.dotted.add(k)
+      }
     }
   }
 
@@ -121,8 +139,18 @@ export class BoardView {
     })
   }
 
+  /** Reveal dots on cells that just became empty (an arrow left). Existing dots are left untouched
+   * so they don't re-trigger their fade-in. */
   refreshDots(): void {
-    this.renderDots()
+    const occ = this.occupiedCells()
+    for (let r = 0; r < this.board.rows; r++) {
+      for (let c = 0; c < this.board.cols; c++) {
+        const k = key(c, r)
+        if (occ.has(k) || this.dotted.has(k)) continue
+        this.drawDot(c, r)
+        this.dotted.add(k)
+      }
+    }
   }
 
   /** Brief whole-board tint toward red on a failed tap. */

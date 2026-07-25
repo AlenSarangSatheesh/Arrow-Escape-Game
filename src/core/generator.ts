@@ -103,7 +103,6 @@ function build(spec: LevelSpec, rng: Rng): Board | null {
     cols: spec.cols,
     rows: spec.rows,
     arrows: placed,
-    vacated: new Set(),
     solution: placed.map((a) => a.id).reverse(),
   }
 }
@@ -272,5 +271,5 @@ function tutorialBoard(spec: LevelSpec): Board {
     dir: 'N' as const,
     red: false,
   }))
-  return { cols: spec.cols, rows: spec.rows, arrows, vacated: new Set(), solution: [0, 1, 2] }
+  return { cols: spec.cols, rows: spec.rows, arrows, solution: [0, 1, 2] }
 }

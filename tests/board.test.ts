@@ -13,7 +13,6 @@ const board = (cols: number, rows: number, arrows: Arrow[]): Board => ({
   cols,
   rows,
   arrows,
-  vacated: new Set(),
   solution: arrows.map((a) => a.id),
 })
 
@@ -67,10 +66,10 @@ describe('isBlocked', () => {
 })
 
 describe('removeArrow', () => {
-  it('vacates every cell the arrow held', () => {
+  it('removes the arrow and clears the board when it was the last', () => {
     const b = board(4, 4, [arrow(0, [[0, 3], [0, 2]], 'N')])
     removeArrow(b, 0)
-    expect([...b.vacated].sort()).toEqual(['0,2', '0,3'])
+    expect(b.arrows).toHaveLength(0)
     expect(isCleared(b)).toBe(true)
   })
 })

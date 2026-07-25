@@ -35,8 +35,6 @@ export interface Board {
   cols: number
   rows: number
   arrows: Arrow[]
-  /** Keys of cells an arrow once occupied and has now vacated. Drives the dot layer. */
-  vacated: Set<string>
   /** Arrow ids in an order that clears the board without ever hitting a blocked arrow. */
   solution: number[]
 }

@@ -41,11 +41,10 @@ export function arrowById(board: Board, id: number): Arrow | undefined {
   return board.arrows.find((a) => a.id === id)
 }
 
-/** Removes the arrow and marks every cell it held as vacated (which reveals a grid dot). */
+/** Removes the arrow; its cells become empty and the board view reveals a grid dot on each. */
 export function removeArrow(board: Board, id: number): void {
   const i = board.arrows.findIndex((a) => a.id === id)
   if (i === -1) return
-  for (const cell of board.arrows[i].cells) board.vacated.add(cellKey(cell))
   board.arrows.splice(i, 1)
 }
 
@@ -59,7 +58,6 @@ export function cloneBoard(board: Board): Board {
     cols: board.cols,
     rows: board.rows,
     arrows: board.arrows.map((a) => ({ ...a, cells: a.cells.map((c) => ({ ...c })) })),
-    vacated: new Set(board.vacated),
     solution: [...board.solution],
   }
 }
