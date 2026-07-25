@@ -1,3 +1,4 @@
+import { playBlocked, playEscape } from '../audio/sfx'
 import { isBlocked } from '../core/board'
 import { fireConfetti } from '../render/confetti'
 import { BoardView } from '../render/boardView'
@@ -91,6 +92,7 @@ export class GameController {
         this.busy.add(id)
         this.escaping++
         this.hintEl.hidden = true
+        playEscape()
         view.escape(id, () => {
           if (gen !== this.gen) return // board was reset/left mid-animation
           this.busy.delete(id)
@@ -103,6 +105,7 @@ export class GameController {
 
       case 'blocked': {
         this.busy.add(id)
+        playBlocked()
         if (result.costLife) {
           view.flash()
           this.hud.loseLife()
